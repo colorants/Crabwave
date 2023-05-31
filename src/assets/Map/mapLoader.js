@@ -1,13 +1,43 @@
-import {Actor, Vector} from "excalibur";
+import {Actor, Vector, GraphicsGroup, vec} from 'excalibur'
 import {Resources} from "../resources.js";
 
 
-export class MapLoader extends Actor {
-    x
-    y
+export class Background extends Actor {
     constructor() {
-        super()
-        this.graphics.use(Resources.Map.toSprite())
-        this.scale = new Vector(1, 1);
+
+        super({
+            z: 0,
+        });
+
+    }
+    offset
+
+    onInitialize(engine){
+        const spaceImage = Resources.Background.toSprite()
+        this.offset = spaceImage.width
+
+        const group = new GraphicsGroup({
+            members: [
+                {
+                    graphic: spaceImage,
+                    pos: new Vector(0, 0),
+                },
+                {
+                    graphic: spaceImage,
+                    pos: new Vector(spaceImage.width, 0),
+                }
+            ]
+        })
+
+        this.graphics.anchor = new Vector(0,0)
+        this.graphics.add(group)
+        this.pos = new Vector(0, -10)
+        this.vel = new Vector(-100, 0)
+    }
+
+    onPostUpdate(engine, delta) {
+        if (this.pos.x < -this.offset) {
+            this.pos = new Vector(0, 0)
+        }
     }
 }

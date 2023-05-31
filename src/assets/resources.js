@@ -1,13 +1,22 @@
 import { ImageSource, Sound, Resource, Loader } from 'excalibur'
 import crabSprite from '../images/crabSprite.png'
 import waterSprite from '../images/waterSprite.png'
-import mapSprite from '../images/mapSprite.png'
+import backGroundSprite from '../images/backgroundSprite.png'
+import shellSprite from '../images/shellSprite.png'
 
 const Resources = {
     Crab: new ImageSource(crabSprite),
+    Shell: new ImageSource(shellSprite),
     Water: new ImageSource(waterSprite),
-    Map : new ImageSource(mapSprite)
-}
-const ResourceLoader = new Loader([Resources.Crab,Resources.Water], [Resources.Map])
+    Background : new ImageSource(backGroundSprite),
 
-export { Resources, ResourceLoader }
+}
+const ResourceLoader = new Loader(
+    [Resources.Crab,
+        Resources.Water,
+        Resources.Background,
+        Resources.Shell
+
+    ])
+
+export { Resources, ResourceLoader };
