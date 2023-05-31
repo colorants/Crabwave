@@ -53,7 +53,8 @@ export class Crab extends Actor {
             this.shootWater()
         }
             this.vel = new Vector(xspeed, yspeed)
-        // blijf binnen beeld
+
+        // cant go off screen
         this.pos.x = clamp(this.pos.x, this.width/2, _engine.drawWidth - this.width/2);
         this.pos.y = clamp(this.pos.y, this.height/2, _engine.drawHeight - this.height/2);
 
