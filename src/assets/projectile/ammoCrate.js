@@ -12,24 +12,28 @@ export class AmmoCrate extends Actor {
 
     constructor() {
         super({
-            width:Resources.Crab.width,
-            height:Resources.Crab.height,
+            width:40,
+            height:40,
+            pos: new Vector(1500, Math.random() * 700 + 100),
         });
-        this.scale = new Vector(0.2, 0.2)
         this.z= 100;
+
     }
 
     onInitialize(engine) {
         this.engine = engine
-        this.graphics.use(Resources.Crab.toSprite())
-        this.vel = new Vector(randomInRange(-400,-800), 0)
-        this.pos = new Vector(1500,randomInRange(50,750) )
-        this.on("precollision", (e) => {
-            console.log(e)
+        this.graphics.use(Resources.AmmoCrate.toSprite())
+        this.graphics.scale = new Vector(200,200)
+        this.vel = new Vector(0,0)
+
+
+        this.on("collisionstart", (e) => {
             if (e.other instanceof Crab) {
                 this.kill()
-                this.engine.getAmmo()
+                this.engine.currentScene.getAmmo();
             }
         })
     }
+
+
 }

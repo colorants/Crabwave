@@ -1,36 +1,62 @@
-import {Actor, clamp, CollisionType, Color, Font, FontUnit, Input, Label, Vector} from "excalibur";
+import {Actor, clamp, CollisionType, Color, Engine, Font, FontUnit, Input, Label, Vector} from "excalibur";
 import {Resources} from "../resources.js";
 import {WaterDrop} from "../projectile/waterDrop.js";
 import {HermitShell} from "../projectile/hermitShell.js";
+import {Turtle} from "../enemies/turtle.js";
+import {Octopus} from "../enemies/octupus.js";
+import {Ammo} from "../ui/ammo.js";
 
 
 export class Crab extends Actor {
     x
     y
     engine
+    ammoX
     constructor() {
         super({
-            width: 30,
-            height:30,
+            width: Resources.Crab.width,
+                height: Resources.Crab.height,
         });
+
     }
     onInitialize(engine) {
         this.engine = engine;
-        // this.anchor.setTo(0, 0);
         this.graphics.use(Resources.Crab.toSprite())
-        this.graphics.scale = new Vector(0.2, 0.2)
+        // this.graphics.scale = new Vector(0.2, 0.2)
         this.vel = new Vector(0, 0)
         this.pos = new Vector(100, 400);
-        this.z = 3;
+        this.z = 1;
+
+       this.ammoX = new Ammo({})
+        engine.currentScene.add(this.ammoX)
+
+        this.score = 30
+        this.ammoLabel = new Label({
+            z: 100,
+            text: `Ammo: ${this.score}`,
+            pos: new Vector(100, 100),
+            font: new Font({
+                family: 'comic sans ms',
+                size: 40,
+                unit: FontUnit.Px,
+                color:Color.White
+            })
+        })
+        engine.currentScene.add(this.ammoLabel)
 
         this.on("collisionstart", (e) => {
-            if (e.other instanceof HermitShell) {
-                this.getArmor()
-            }
-        })
+            if (e.other instanceof Octopus || e.other instanceof Turtle) {
+                this.kill()
+                this.engine.currentScene.remove("gameScene")
+                this.engine.goToScene("endScene",{score: this.score}
+                )
+
+
+            }})
     }
 
     onPreUpdate(_engine, _delta) {
+
         super.onPreUpdate(_engine, _delta);
         let xspeed = 0
         let yspeed = 0
@@ -50,43 +76,38 @@ export class Crab extends Actor {
             }
         }
         if (_engine.input.keyboard.wasPressed(Input.Keys.F)) {
-            this.shootWater()
+            if(this.score > 0) {
+                this.shootWater()
+            }
         }
-            this.vel = new Vector(xspeed, yspeed)
+        this.vel = new Vector(xspeed, yspeed)
 
         // cant go off screen
         this.pos.x = clamp(this.pos.x, this.width/2, _engine.drawWidth - this.width/2);
         this.pos.y = clamp(this.pos.y, this.height/2, _engine.drawHeight - this.height/2);
 
 
+
     }
+
     shootWater() {
-        if (this.engine.score <= 0) {
+        this.updateScore();
+        if (this.score <= 0) {
             return
         }
+        let water = new WaterDrop(this.pos.x, this.pos.y)
+        water.vel = new Vector(700, 0)
         this.actions.delay(200).callMethod(() => {
-            let water = new WaterDrop(this.pos.x, this.pos.y)
-            water.vel = new Vector(700, 0)
+
             this.scene.add(water)
-            this.engine.updateScore();
+
         })
 
-
-
     }
 
-    getArmor() {
-       console.log("bruh")
+    updateScore() {
+        this.score -= 1
+        this.ammoLabel.text = `Ammo: ${this.score}`
     }
-
-
-
-
-
-
-
-
-
-
 
 }

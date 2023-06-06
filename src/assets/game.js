@@ -1,87 +1,46 @@
 import '../css/style.css'
-import {Color, Engine, Font, FontUnit, Label, Timer, Vector} from "excalibur"
+import {Color, Engine, Font, FontUnit, Input, Label, Random, Timer, Vector} from "excalibur"
 import {ResourceLoader} from "./resources.js";
-import {Background} from "./map/maploader.js";
-import {Crab} from "./player/crab.js";
-import {WaterDrop} from "./projectile/waterDrop.js";
-import {Seagull} from "./enemies/seagull.js";
-import {HermitShell} from "./projectile/hermitShell.js";
-
-import {AmmoCrate} from "./projectile/ammoCrate.js";
-
-
+import {GameScene} from "./scenes/gameScene.js";
+import {StartScene} from "./scenes/startScene.js";
+import {EndScene} from "./scenes/endScene.js";
 
 
 
 export class Game extends Engine {
+    engine
+
+
     constructor() {
         super(
             {
                 width: 1440,
                 height: 900,
-               displayMode: "fullscreen",
+                displayMode: "fullscreen",
                 maxFps: 50,
             }
         );
+        ResourceLoader.suppressPlayButton = true
         this.start(ResourceLoader).then(() => this.startGame())
+        this.random = new Random(1337)
 
     }
 
-    startGame() {
-        this.showDebug(true)
-        const backgroundLoop = new Background({
-            height: 900,
-            width: 1440,
-        })
-        this.add(backgroundLoop);
 
-//adds player
-        const crab = new Crab({})
-        this.add(crab);
+    startGame(engine) {
 
-        //adds waterdrop
-        const water = new WaterDrop({})
-        this.add(water);
+        this.add("gameScene", new GameScene(this.engine))
+        this.add("startScene", new StartScene(this.engine))
+        this.add("endScene", new EndScene(this.engine))
 
-        //adds seagull
-        const seagull = new Seagull({})
-        this.add(seagull);
-        const hermitcrab = new HermitShell({})
-        this.add(hermitcrab)
+        this.goToScene("startScene")
 
-        //adds ammocrate
-        const ammoCrate = new AmmoCrate({
-            scale: new Vector(100, 100)
-        })
-        this.add(ammoCrate)
 
-        //ammo counter
-        const ammo = new Label({})
-        this.add(ammo)
-        this.score = 30
-        this.ammo = new Label({
-            text: `Ammo: ${this.score}`,
-            pos: new Vector(100, 100),
-            font: new Font({
-                family: 'impact',
-                size: 40,
-                unit: FontUnit.Px,
-                color:Color.White
-            })
-        })
-        this.add(this.ammo)
+        this.engine = engine
 
     }
 
-    updateScore(){
-        this.score--
-        this.ammo.text = `Ammo: ${this.score}`
-    }
 
-    getAmmo(){
-        this.score += 30
-        this.ammo.text = `Ammo: ${this.score}`
-    }
 }
 new Game()
 
