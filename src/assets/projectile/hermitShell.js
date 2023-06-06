@@ -24,7 +24,7 @@ export class HermitShell extends AmmoCrate {
         this.engine = engine
         this.graphics.use(Resources.Shell.toSprite())
         this.graphics.scale = new Vector(1, 1)
-        this.vel = new Vector(0,0)
+        this.vel = new Vector(-200,0)
 
         this.on("collisionstart", (e) => {
             if (e.other instanceof Crab) {

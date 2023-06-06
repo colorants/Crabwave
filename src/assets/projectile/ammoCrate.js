@@ -24,13 +24,12 @@ export class AmmoCrate extends Actor {
         this.engine = engine
         this.graphics.use(Resources.AmmoCrate.toSprite())
         this.graphics.scale = new Vector(200,200)
-        this.vel = new Vector(0,0)
+        this.vel = new Vector(-200,0)
 
 
         this.on("collisionstart", (e) => {
             if (e.other instanceof Crab) {
                 this.kill()
-                this.engine.currentScene.getAmmo();
             }
         })
     }

@@ -1,9 +1,10 @@
-import {Actor, CollisionType, Input, randomInRange, vec, Vector} from "excalibur";
+import {Actor, CollisionType, Engine, Input, randomInRange, vec, Vector} from "excalibur";
 import {Resources} from "../resources.js";
 import {WaterDrop} from "../projectile/waterDrop.js";
+import {Octopus} from "./octupus.js";
 
 
-export class Turtle extends Actor  {
+export class Turtle extends Octopus  {
     x
     y
 
@@ -12,7 +13,6 @@ export class Turtle extends Actor  {
         super({
             width: Resources.Turtle.width,
             height: Resources.Turtle.height,
-            pos: new Vector(1500, Math.random() * 700 + 100),
 
         });
         this.z= 100;
@@ -24,12 +24,17 @@ export class Turtle extends Actor  {
         this.graphics.scale = new Vector(2,2)
         this.vel = new Vector(-130,0)
         this.actions.scaleTo(vec(1.4,1.4),vec(10,10))
-
-
-        this.on("collisionstart", (e) => {
-            if (e.other instanceof WaterDrop) {
-                this.kill()
-            }
-        })
     }
+
+    onPostUpdate(engine, delta) {
+            this.on("collisionstart", (e) => {
+                if (e.other instanceof WaterDrop) {
+                    this.kill()
+                }
+            })
+    }
+
+
 }
+
+
