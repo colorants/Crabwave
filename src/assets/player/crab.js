@@ -30,7 +30,7 @@ export class Crab extends Actor {
         this.actions.moveTo(200,400, 100)
         this.z = 1;
 
-       this.ammoX = new Ammo({})
+       this.ammoX = new Ammo({});
         engine.currentScene.add(this.ammoX)
 
         this.score = 30
