@@ -5,6 +5,7 @@ import {HermitShell} from "../projectile/hermitShell.js";
 import {Turtle} from "../enemies/turtle.js";
 import {Octopus} from "../enemies/octupus.js";
 import {Ammo} from "../ui/ammo.js";
+import {AmmoCrate} from "../projectile/ammoCrate.js";
 
 
 export class Crab extends Actor {
@@ -20,11 +21,13 @@ export class Crab extends Actor {
 
     }
     onInitialize(engine) {
+        this.actions.moveTo(100,400)
         this.engine = engine;
         this.graphics.use(Resources.Crab.toSprite())
         // this.graphics.scale = new Vector(0.2, 0.2)
         this.vel = new Vector(0, 0)
-        this.pos = new Vector(100, 400);
+        this.pos = new Vector(100, 400)
+        this.actions.moveTo(200,400, 100)
         this.z = 1;
 
        this.ammoX = new Ammo({})
@@ -42,7 +45,9 @@ export class Crab extends Actor {
                 color:Color.White
             })
         })
-        engine.currentScene.add(this.ammoLabel)
+        this.addChild(this.ammoLabel)
+
+
 
         this.on("collisionstart", (e) => {
             if (e.other instanceof Octopus || e.other instanceof Turtle) {
@@ -53,13 +58,33 @@ export class Crab extends Actor {
 
 
             }})
+
+        this.on('collisionstart', (e) => {
+            if (e.other instanceof AmmoCrate) {
+                this.getAmmo()
+            }
+        })
+
     }
 
+
+
+    getAmmo() {
+        this.score += 30
+        this.ammoLabel.text = `Ammo: ${this.score}`
+    }
+
+
     onPreUpdate(_engine, _delta) {
+
+
 
         super.onPreUpdate(_engine, _delta);
         let xspeed = 0
         let yspeed = 0
+
+
+
         if (_engine.input.keyboard.isHeld(Input.Keys.W)) {
             yspeed = -300
         }
@@ -88,11 +113,13 @@ export class Crab extends Actor {
 
 
 
+
     }
 
     shootWater() {
         this.updateScore();
         if (this.score <= 0) {
+
             return
         }
         let water = new WaterDrop(this.pos.x, this.pos.y)
@@ -109,5 +136,7 @@ export class Crab extends Actor {
         this.score -= 1
         this.ammoLabel.text = `Ammo: ${this.score}`
     }
+
+
 
 }

@@ -62,6 +62,10 @@ export class GameScene extends Scene {
         const crab = new Crab({
         })
         this.add(crab);
+
+
+
+
         //adds waterdrop
         const water = new WaterDrop({
 
@@ -75,10 +79,7 @@ export class GameScene extends Scene {
     }
 
 
-    getAmmo() {
-        this.score += 30
-        this.ammo.text = `Ammo: ${this.score}`
-    }
+
 
     spawnEnemy() {
         console.log("spawn")
