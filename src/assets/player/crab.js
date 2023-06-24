@@ -13,6 +13,7 @@ export class Crab extends Actor {
     y
     engine
     ammoX
+    gamemode = 1;
     constructor() {
         super({
             width: Resources.Crab.width,
@@ -83,28 +84,59 @@ export class Crab extends Actor {
         let xspeed = 0
         let yspeed = 0
 
+        if (_engine.input.keyboard.isHeld(Input.Keys.O)) {
+           this.gamemode = 0
+        }
 
+        if (_engine.input.keyboard.isHeld(Input.Keys.P)) {
+           this.gamemode = 1
+        }
 
-        if (_engine.input.keyboard.isHeld(Input.Keys.W)) {
-            yspeed = -300
+if (this.gamemode === 1) {
+    if (_engine.input.keyboard.isHeld(Input.Keys.W)) {
+        yspeed = -300
+    }
+    if (_engine.input.keyboard.isHeld(Input.Keys.S)) {
+        yspeed = 300
+    }
+    if (_engine.input.keyboard.isHeld(Input.Keys.A)) {
+        xspeed = -300
+    }
+    if (_engine.input.keyboard.isHeld(Input.Keys.D)) {
+        xspeed = 300
+        if (this.pos.x > 400) {
+            xspeed = 0
         }
-        if (_engine.input.keyboard.isHeld(Input.Keys.S))  {
-            yspeed = 300
+    }
+    if (_engine.input.keyboard.wasPressed(Input.Keys.F)) {
+        if (this.score > 0) {
+            this.shootWater()
         }
-        if (_engine.input.keyboard.isHeld(Input.Keys.A)) {
-            xspeed = -300
+    }
+}
+
+if (this.gamemode === 0) {
+    if ("joystick0up".isHeld) {
+        yspeed = -300
+    }
+    if ("joystick0down".isHeld)  {
+        yspeed = 300
+    }
+    if ("joystick0left".isHeld) {
+        xspeed = -300
+    }
+    if ("joystick0right".isHeld) {
+        xspeed = 300
+        if (this.pos.x > 400) {
+            xspeed = 0
         }
-        if (_engine.input.keyboard.isHeld(Input.Keys.D)) {
-            xspeed = 300
-            if (this.pos.x > 400) {
-                xspeed = 0
-            }
+    }
+    if ("joystick0button0".wasPressed) {
+        if(this.score > 0) {
+            this.shootWater()
         }
-        if (_engine.input.keyboard.wasPressed(Input.Keys.F)) {
-            if(this.score > 0) {
-                this.shootWater()
-            }
-        }
+    }
+}
         this.vel = new Vector(xspeed, yspeed)
 
         // cant go off screen

@@ -27,7 +27,7 @@ export class GameScene extends Scene {
 
         this.timerPowerup = new Timer({
             fcn: () => this.spawnPowerup(Engine),
-            interval: 1100,
+            interval: 2100,
             repeats: true
         })
 
