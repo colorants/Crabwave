@@ -37,7 +37,7 @@ export class Crab extends Actor {
         this.score = 30
         this.ammoLabel = new Label({
             z: 100,
-            text: `Ammo: ${this.score}`,
+            text: `Ammo: ${this.engine.score}`,
             pos: new Vector(100, 100),
             font: new Font({
                 family: 'comic sans ms',
@@ -71,8 +71,8 @@ export class Crab extends Actor {
 
 
     getAmmo() {
-        this.score += 30
-        this.ammoLabel.text = `Ammo: ${this.score}`
+        this.engine.score += 30
+        this.ammoLabel.text = `Ammo: ${this.engine.score}`
     }
 
 

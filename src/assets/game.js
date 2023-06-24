@@ -11,6 +11,7 @@ import {Arcade} from "arcade-game";
 export class Game extends Engine {
     engine
     #arcade;
+    ammoX;
     #joystickListener;
 
 
